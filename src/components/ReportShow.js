@@ -1,8 +1,15 @@
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
+import { getReport } from '../store/reports';
 
 const ReportShow = () => {
   const { reportId } = useParams();
-  const report = {}; // populate from Redux store
+  const report = useSelector(state => state.reports[reportId]); // populate from Redux store
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getReport(reportId))
+  }, [dispatch])
 
   /* **DO NOT CHANGE THE RETURN VALUE** */
   return (

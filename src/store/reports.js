@@ -3,6 +3,7 @@ export const LOAD_REPORTS = 'reports/LOAD_REPORTS';
 export const RECEIVE_REPORT = 'reports/RECEIVE_REPORT';
 export const UPDATE_REPORT = 'reports/UPDATE_REPORT';
 export const REMOVE_REPORT = 'reports/REMOVE_REPORT';
+export const ADD_REPORT = 'reports/ADD_REPORT';
 
 /**  Action Creators: */
 export const loadReports = (reports) => ({
@@ -46,11 +47,38 @@ export const deleteReport = (id) => async dispatch => {
   });
 
   if (response.ok) {
-    const reportDeleted = await response.json();
+    // const reportDeleted = await response.json();
     // console.log(reportDeleted);
       dispatch(removeReport(id))
   } else {
-    console.log("error from server ====>  ", response.error );
+    console.log("error from server ====>  ", response.statusText );
+  }
+}
+export const getReport = (id) => async dispatch => {
+  const response = await fetch(`/api/reports/${id}`);
+
+  if (response.ok) {
+    const report = await response.json();
+    // console.log(reportDeleted);
+      dispatch(receiveReport(report))
+  } else {
+    console.log("error from server ====>  ", response.statusText );
+  }
+}
+export const addReport = (report) => async dispatch => {
+  const response = await fetch(`/api/reports/`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(report)
+  });
+
+  if (response.ok) {
+    const data = await response.json();
+    // console.log("data id is ===>>>",data.id);
+    dispatch(receiveReport(data))
+    return data
+  } else {
+    console.log("error from server ====>  ", response );
   }
 }
 
@@ -71,6 +99,8 @@ const reportsReducer = (state = {}, action) => {
       const newState = { ...state };
       delete newState[action.reportId];
       return newState;
+    case ADD_REPORT:{
+      return { ...state, [action.report.id]: action.report.id }}
     default:
       return state;
   }

@@ -1,16 +1,42 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { addReport } from '../store/reports';
 
 const ReportForm = ({ report, formType }) => {
   const history = useHistory();
   const [understanding, setUnderstanding] = useState(report?.understanding);
   const [improvement, setImprovement] = useState(report?.improvement);
   const [errors, setErrors] = useState({});
-
+  const dispatch = useDispatch();
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
+
+
     report = { ...report, understanding, improvement };
+    try {
+      const data = await dispatch(addReport(report))
+      // console.log("id in reportForm =>",data.id);
+      history.push(`/reports/${data.id}`)
+    } catch (error) {
+      // console.log(error);
+      const newErrors = {}
+      if (!understanding) {
+        // console.log("value of understanding should be undefined", understanding);
+        newErrors.understanding = "Understanding is required"
+
+      }
+      if (!improvement) {
+        // console.log("value of improvement should be undefined", improvement);
+        newErrors.improvement = "Improvement is required"
+
+      }
+      if (Object.values(newErrors).length > 0) {
+        setErrors(newErrors)
+        return
+      }
+    }
   };
 
   /* **DO NOT CHANGE THE RETURN VALUE** */
