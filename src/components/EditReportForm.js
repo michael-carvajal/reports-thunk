@@ -1,10 +1,16 @@
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-
+import { getReport } from '../store/reports';
 import ReportForm from './ReportForm';
 
 const EditReportForm = () => {
   const { reportId } = useParams();
-  const report = {}; // populate from Redux store
+  const report = useSelector(state => state.reports[reportId]); // populate from Redux store
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getReport(reportId))
+  }, [dispatch])
 
   if (!report) return(<></>);
 

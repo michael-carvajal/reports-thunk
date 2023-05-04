@@ -65,6 +65,22 @@ export const getReport = (id) => async dispatch => {
     console.log("error from server ====>  ", response.statusText );
   }
 }
+export const updateReport = (report) => async dispatch => {
+  const response = await fetch(`/api/reports/${report.id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(report)
+  });
+
+  if (response.ok) {
+    const updateReport = await response.json();
+    // console.log(reportDeleted);
+    dispatch(editReport(updateReport))
+    return updateReport
+  } else {
+    console.log("error from server ====>  ", response.statusText );
+  }
+}
 export const addReport = (report) => async dispatch => {
   const response = await fetch(`/api/reports/`, {
     method: "POST",
@@ -101,6 +117,8 @@ const reportsReducer = (state = {}, action) => {
       return newState;
     case ADD_REPORT:{
       return { ...state, [action.report.id]: action.report.id }}
+    case UPDATE_REPORT:{
+      return { ...state, [action.report.id]: action.report }}
     default:
       return state;
   }

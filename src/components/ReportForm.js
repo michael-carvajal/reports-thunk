@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { addReport } from '../store/reports';
+import { addReport, updateReport } from '../store/reports';
 
 const ReportForm = ({ report, formType }) => {
   const history = useHistory();
@@ -16,11 +16,6 @@ const ReportForm = ({ report, formType }) => {
 
     report = { ...report, understanding, improvement };
     try {
-      const data = await dispatch(addReport(report))
-      // console.log("id in reportForm =>",data.id);
-      history.push(`/reports/${data.id}`)
-    } catch (error) {
-      // console.log(error);
       const newErrors = {}
       if (!understanding) {
         // console.log("value of understanding should be undefined", understanding);
@@ -36,6 +31,20 @@ const ReportForm = ({ report, formType }) => {
         setErrors(newErrors)
         return
       }
+      if (formType !==  "Update Report") {
+        const data = await dispatch(addReport(report))
+        history.push(`/reports/${data.id}`)
+
+      } else {
+        const data = await dispatch(updateReport(report))
+        console.log(data);
+        history.push(`/reports/${data.id}`)
+
+      }
+      // console.log("id in reportForm =>",data.id);
+    } catch (error) {
+      console.log(error);
+      
     }
   };
 
