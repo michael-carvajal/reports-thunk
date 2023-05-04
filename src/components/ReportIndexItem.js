@@ -1,8 +1,12 @@
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { deleteReport } from '../store/reports';
 
 const ReportIndexItem = ({ report }) => {
+  const dispatch = useDispatch()
   const handleDelete = (e) => {
     e.preventDefault();
+    dispatch(deleteReport(report.id))
   };
 
   /* **DO NOT CHANGE THE RETURN VALUE** */

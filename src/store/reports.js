@@ -29,6 +29,31 @@ export const removeReport = (reportId) => ({
 
 // Your code here
 
+export const fetchReports = () => async dispatch => {
+  const response = await fetch('/api/reports');
+
+  if (response.ok) {
+    const fetchedReports = await response.json();
+    // console.log(fetchedReports);
+      dispatch(loadReports(fetchedReports))
+  } else {
+    console.log("error from server ====>  ", response.error );
+  }
+}
+export const deleteReport = (id) => async dispatch => {
+  const response = await fetch(`/api/reports/${id}`, {
+    method: 'DELETE'
+  });
+
+  if (response.ok) {
+    const reportDeleted = await response.json();
+    // console.log(reportDeleted);
+      dispatch(removeReport(id))
+  } else {
+    console.log("error from server ====>  ", response.error );
+  }
+}
+
 /** The reports reducer is complete and does not need to be modified */
 const reportsReducer = (state = {}, action) => {
   switch (action.type) {
