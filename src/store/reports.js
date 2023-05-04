@@ -117,8 +117,7 @@ const reportsReducer = (state = {}, action) => {
       return newState;
     case ADD_REPORT:{
       return { ...state, [action.report.id]: action.report.id }}
-    case UPDATE_REPORT:{
-      return { ...state, [action.report.id]: action.report }}
+  
     default:
       return state;
   }

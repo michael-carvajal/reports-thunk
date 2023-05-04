@@ -9,7 +9,7 @@ const ReportShow = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getReport(reportId))
-  }, [dispatch])
+  }, [dispatch, reportId])
 
   /* **DO NOT CHANGE THE RETURN VALUE** */
   return (

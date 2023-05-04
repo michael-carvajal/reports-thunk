@@ -10,7 +10,7 @@ const EditReportForm = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getReport(reportId))
-  }, [dispatch])
+  }, [dispatch, reportId])
 
   if (!report) return(<></>);
 
