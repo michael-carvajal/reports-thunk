@@ -12,68 +12,36 @@ const ReportForm = ({ report, formType }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
-
-
+    const newErrors = {};
     report = { ...report, understanding, improvement };
-    try {
-      if (formType !==  "Update Report") {
-        const newErrors = {}
-        if (!understanding) {
-          // console.log("value of understanding should be undefined", understanding);
-          newErrors.understanding = "Understanding is required"
 
-        }
-        if (!improvement) {
-          // console.log("value of improvement should be undefined", improvement);
-          newErrors.improvement = "Improvement is required"
+    if (formType === "Update Report") {
+      console.log(improvement);
+      const editedReport = await dispatch(updateReport(report));
+      console.log(editedReport);
+      report = editedReport;
 
-        }
-        if (Object.values(newErrors).length > 0) {
-          setErrors(newErrors)
-          return
-        }
-        const data = await dispatch(addReport(report))
-        history.push(`/reports/${data.id}`)
-
-      } else {
-        const newErrors = {}
-        if (!understanding) {
-          // console.log("value of understanding should be undefined", understanding);
-          newErrors.understanding = "Understanding is required"
-
-        }
-        if (!improvement) {
-          // console.log("value of improvement should be undefined", improvement);
-          newErrors.improvement = "Improvement is required"
-
-        }
-        if (Object.values(newErrors).length > 0) {
-          setErrors(newErrors)
-          return
-        }
-        const data = await dispatch(updateReport(report))
-        console.log(data);
-        history.push(`/reports/${data.id}`)
-
-      }
-      // console.log("id in reportForm =>",data.id);
-    } catch (error) {
-      console.log(error);
-      const newErrors = {}
+    } else if (formType === "Create Report") {
       if (!understanding) {
-        // console.log("value of understanding should be undefined", understanding);
         newErrors.understanding = "Understanding is required"
-
       }
+      console.log(improvement);
       if (!improvement) {
-        // console.log("value of improvement should be undefined", improvement);
-        newErrors.improvement = "Improvement is required"
 
+        newErrors.improvement = "Improvement is required"
       }
       if (Object.values(newErrors).length > 0) {
         setErrors(newErrors)
         return
       }
+      const addedReport = await dispatch(addReport(report))
+      report = addedReport;
+    }
+
+    if (report.errors) {
+      setErrors(report.errors);
+    } else {
+      history.push(`/reports/${report.id}`)
     }
   };
 
